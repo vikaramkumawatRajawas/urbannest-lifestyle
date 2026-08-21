@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Warm Editorial Neo-Luxury Light Mode Palette */
+  --bg-obsidian: #F7F3EA;
+  --bg-charcoal: #EFE8DC;
+  --bg-card: #FFFDF8;
+  --text-ivory: #171512;
+  --text-muted: #686157;
+  --accent-mint: #087F68;
+  --accent-gold: #B98232;
+  --accent-sage: #7E8F7B;
+  --border-subtle: #DDD3C4;
+  --bg-glass: rgba(255, 253, 248, 0.85);
+  --shadow-warm: 0 25px 50px -12px rgba(185, 130, 50, 0.12);
+}
+
+html.dark, :root.dark {
+  /* Dramatic Neo-Luxury Dark Mode Palette */
+  --bg-obsidian: #0B0D0E;
+  --bg-charcoal: #151918;
+  --bg-card: #151918;
+  --text-ivory: #F4EFE6;
+  --text-muted: #9E988F;
+  --accent-mint: #7FFFD4;
+  --accent-gold: #D6B77A;
+  --accent-sage: #A8B8A5;
+  --border-subtle: #222926;
+  --bg-glass: rgba(21, 25, 24, 0.85);
+  --shadow-warm: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+}
+
+body {
+  background-color: var(--bg-obsidian);
+  color: var(--text-ivory);
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+}
+
+/* Editorial Typography */
+.font-serif-luxury {
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+}
+
+.font-sans-luxury {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+/* Neo-Luxury 3D Glassmorphism Panel */
+.glass-panel-luxury {
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-warm);
+}
+
+/* Glowing AI Button Badge with Sage + Champagne Glow (Light) & Mint + Gold (Dark) */
+.btn-ai-glow {
+  position: relative;
+  background: var(--bg-charcoal);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 0 20px 2px rgba(126, 143, 123, 0.25), 0 0 40px 6px rgba(185, 130, 50, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .btn-ai-glow {
+  border: 1px solid rgba(127, 255, 212, 0.4);
+  box-shadow: 0 0 20px 2px rgba(127, 255, 212, 0.25), 0 0 40px 6px rgba(214, 183, 122, 0.15);
+}
+
+.btn-ai-glow:hover {
+  border-color: var(--accent-mint);
+  box-shadow: 0 0 30px 5px rgba(8, 127, 104, 0.3), 0 0 50px 10px rgba(185, 130, 50, 0.25);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.dark .btn-ai-glow:hover {
+  border-color: rgba(127, 255, 212, 0.8);
+  box-shadow: 0 0 30px 5px rgba(127, 255, 212, 0.45), 0 0 50px 10px rgba(214, 183, 122, 0.3);
+}
+
+/* 3D Floating Levitation */
+.floating-3d {
+  animation: levitate-gentle 5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes levitate-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+/* 3D Product Card Tilt */
+.card-luxury-3d {
+  transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.5s ease, border-color 0.4s ease;
+  transform-style: preserve-3d;
+}
+
+.card-luxury-3d:hover {
+  transform: translateY(-10px) rotateX(4deg) scale(1.02);
+  box-shadow: 0 30px 60px -10px rgba(185, 130, 50, 0.18), 0 10px 25px -5px rgba(8, 127, 104, 0.1);
+  border-color: var(--accent-gold);
+}
+
+.dark .card-luxury-3d:hover {
+  box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.7), 0 0 25px 2px rgba(214, 183, 122, 0.18);
+  border-color: rgba(214, 183, 122, 0.5);
+}
+
+/* Gradient Typography */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #B98232 0%, #8C5F1E 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-gold-gradient {
+  background: linear-gradient(135deg, #F4EFE6 0%, #D6B77A 60%, #E8D09E 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-mint-gradient {
+  background: linear-gradient(135deg, #087F68 0%, #045243 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .text-mint-gradient {
+  background: linear-gradient(135deg, #7FFFD4 0%, #059669 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Shimmer Light Effect */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite;
+}
+
+/* Smooth Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-obsidian);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
+}

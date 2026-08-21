@@ -1,0 +1,39 @@
+{
+  "name": "urbannest-lifestyle-store",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "https://kumawatvikram.github.io/urbannest-lifestyle",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kumawatvikram/urbannest-lifestyle.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "seed": "npm --prefix backend run seed"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "framer-motion": "^13.1.1",
+    "lucide-react": "^1.33.0",
+    "mongodb": "^7.5.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "gh-pages": "^6.3.0",
+    "jimp": "^1.6.1",
+    "oxlint": "^1.75.0",
+    "vite": "^8.2.0"
+  }
+}
