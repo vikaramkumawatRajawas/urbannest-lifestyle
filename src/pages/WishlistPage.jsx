@@ -23,7 +23,7 @@ const WishlistItemCard = ({ product }) => {
   const productId = product._id || product.id;
 
   return (
-    <div className="group relative rounded-3xl bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-all duration-300 shadow-md hover:shadow-2xl overflow-hidden flex flex-col justify-between">
+    <div className="group relative rounded-3xl bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-all duration-300 shadow-md hover:shadow-2xl overflow-hidden flex flex-col justify-between w-full max-w-full min-w-0">
       {/* Image Container */}
       <div
         onClick={() => setSelectedProduct(product)}
@@ -38,7 +38,7 @@ const WishlistItemCard = ({ product }) => {
         />
 
         {/* Category Pill */}
-        <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-extrabold bg-[#0B0D0E]/80 backdrop-blur-md text-[#7FFFD4] border border-[#7FFFD4]/30 uppercase tracking-wider">
+        <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-extrabold bg-[#0B0D0E]/80 backdrop-blur-md text-[#7FFFD4] border border-[#7FFFD4]/30 uppercase tracking-wider max-w-[65%] truncate">
           {product.category || "UrbanNest"}
         </span>
 
@@ -56,10 +56,10 @@ const WishlistItemCard = ({ product }) => {
       </div>
 
       {/* Product Details */}
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+      <div className="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-4 min-w-0">
         <div
           onClick={() => setSelectedProduct(product)}
-          className="cursor-pointer space-y-1"
+          className="cursor-pointer space-y-1 min-w-0"
         >
           <h3 className="font-serif-luxury font-bold text-base text-[#141210] dark:text-[#F4EFE6] line-clamp-1 group-hover:text-[#D6B77A] transition-colors">
             {product.name}
@@ -69,17 +69,17 @@ const WishlistItemCard = ({ product }) => {
           </p>
         </div>
 
-        <div className="pt-2 border-t border-[#E6DFD5] dark:border-[#222926] flex items-center justify-between gap-2">
-          <span className="font-serif-luxury font-black text-lg text-[#D6B77A]">
+        <div className="pt-2 border-t border-[#E6DFD5] dark:border-[#222926] flex items-center justify-between gap-2 min-w-0">
+          <span className="font-serif-luxury font-black text-base sm:text-lg text-[#D6B77A] truncate min-w-0">
             ₹{product.price}
           </span>
 
           <button
             onClick={() => addToCart(product)}
-            className="px-4 py-2 rounded-2xl bg-[#D6B77A] hover:bg-[#c4a466] text-[#0B0D0E] font-extrabold text-xs uppercase tracking-widest flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+            className="px-3 sm:px-4 py-2 rounded-2xl bg-[#D6B77A] hover:bg-[#c4a466] text-[#0B0D0E] font-extrabold text-xs uppercase tracking-widest flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer shrink-0 min-w-0"
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Add To Cart</span>
+            <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">Add To Cart</span>
           </button>
         </div>
       </div>

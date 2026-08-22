@@ -26,7 +26,7 @@ export const ProductCard = ({ product }) => {
     : 0;
 
   return (
-    <div className="card-luxury-3d group relative bg-[#151918] rounded-3xl border border-[#222926] overflow-hidden shadow-xl flex flex-col justify-between">
+    <div className="card-luxury-3d group relative bg-[#151918] rounded-3xl border border-[#222926] overflow-hidden shadow-xl flex flex-col justify-between w-full max-w-full min-w-0">
       {/* Image Container */}
       <div className="relative aspect-4/3 overflow-hidden bg-[#0B0D0E]">
         <img
@@ -38,14 +38,14 @@ export const ProductCard = ({ product }) => {
         />
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 max-w-[70%]">
           {product.tags?.[0] && (
-            <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-[#0B0D0E]/80 text-[#D6B77A] border border-[#D6B77A]/40 backdrop-blur-md">
+            <span className="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest bg-[#0B0D0E]/80 text-[#D6B77A] border border-[#D6B77A]/40 backdrop-blur-md truncate">
               {product.tags[0]}
             </span>
           )}
           {discountPercent > 0 && (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#059669] text-white">
+            <span className="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#059669] text-white w-fit">
               {discountPercent}% OFF
             </span>
           )}
@@ -57,7 +57,7 @@ export const ProductCard = ({ product }) => {
             e.stopPropagation();
             toggleWishlist(product);
           }}
-          className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md transition-all z-20 cursor-pointer shadow-lg hover:scale-110 ${
+          className={`absolute top-3 right-3 p-2 sm:p-2.5 rounded-full backdrop-blur-md transition-all z-20 cursor-pointer shadow-lg hover:scale-110 ${
             inWishlist
               ? "bg-rose-500 text-white"
               : "bg-[#0B0D0E]/60 text-[#F4EFE6] border border-[#222926] hover:bg-[#151918]"
@@ -80,10 +80,10 @@ export const ProductCard = ({ product }) => {
       </div>
 
       {/* Info Container */}
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-        <div>
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[10px] font-bold text-[#7FFFD4] uppercase tracking-widest">
+      <div className="p-3.5 sm:p-5 flex-1 flex flex-col justify-between space-y-3 min-w-0">
+        <div className="min-w-0">
+          <div className="flex items-center justify-between gap-2 mb-1 min-w-0">
+            <span className="text-[10px] font-bold text-[#7FFFD4] uppercase tracking-widest truncate">
               {product.category}
             </span>
             <StarRating rating={product.rating} reviewsCount={product.reviewsCount} />
@@ -102,13 +102,13 @@ export const ProductCard = ({ product }) => {
         </div>
 
         {/* Price & Add to Cart */}
-        <div className="pt-3 border-t border-[#222926] flex items-center justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-extrabold text-[#F4EFE6]">
+        <div className="pt-3 border-t border-[#222926] flex items-center justify-between gap-2 min-w-0">
+          <div className="flex items-baseline gap-1.5 min-w-0 overflow-hidden">
+            <span className="text-base sm:text-lg font-extrabold text-[#F4EFE6] truncate">
               ₹{product.price}
             </span>
             {product.originalPrice && (
-              <span className="text-xs text-[#9E988F] line-through">
+              <span className="text-[11px] sm:text-xs text-[#9E988F] line-through truncate">
                 ₹{product.originalPrice}
               </span>
             )}
@@ -116,10 +116,10 @@ export const ProductCard = ({ product }) => {
 
           <button
             onClick={() => addToCart(product)}
-            className="px-4 py-2 rounded-xl bg-[#D6B77A] hover:bg-[#c4a466] text-[#0B0D0E] text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer"
+            className="px-3 sm:px-4 py-2 rounded-xl bg-[#D6B77A] hover:bg-[#c4a466] text-[#0B0D0E] text-xs font-extrabold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer shrink-0 min-w-0"
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Add</span>
+            <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
+            <span className="whitespace-nowrap">Add</span>
           </button>
         </div>
       </div>
