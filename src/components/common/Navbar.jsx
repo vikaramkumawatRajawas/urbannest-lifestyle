@@ -129,89 +129,92 @@ export const Navbar = ({ activePage, setActivePage, onOpenChatbot }) => {
 
           {/* Action Tools (Right Header) */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* 1. Search Toggle */}
-            <button
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 rounded-full text-[#6E6860] dark:text-[#9E988F] hover:text-[#141210] dark:hover:text-[#F4EFE6] hover:bg-[#F3EFE9] dark:hover:bg-[#151918] transition-colors cursor-pointer"
-              title="Search products"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
+            {/* Desktop Action Group (Hidden on Mobile/Tablet) */}
+            <div className="hidden md:flex items-center gap-2 sm:gap-3">
+              {/* 1. Search Toggle */}
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="p-2 rounded-full text-[#6E6860] dark:text-[#9E988F] hover:text-[#141210] dark:hover:text-[#F4EFE6] hover:bg-[#F3EFE9] dark:hover:bg-[#151918] transition-colors cursor-pointer"
+                title="Search products"
+                aria-label="Search"
+              >
+                <Search className="w-5 h-5" />
+              </button>
 
-            {/* 2. Wishlist Trigger Button */}
-            <button
-              onClick={() => handleNavClick("wishlist")}
-              className="relative p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-rose-400 transition-colors cursor-pointer shadow-xs"
-              title="View Saved Wishlist"
-              aria-label="Wishlist"
-            >
-              <Heart className="w-5 h-5 text-rose-500 hover:fill-rose-500 transition-all" />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
-                  {wishlistCount}
-                </span>
-              )}
-            </button>
+              {/* 2. Wishlist Trigger Button */}
+              <button
+                onClick={() => handleNavClick("wishlist")}
+                className="relative p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-rose-400 transition-colors cursor-pointer shadow-xs"
+                title="View Saved Wishlist"
+                aria-label="Wishlist"
+              >
+                <Heart className="w-5 h-5 text-rose-500 hover:fill-rose-500 transition-all" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+                    {wishlistCount}
+                  </span>
+                )}
+              </button>
 
-            {/* 3. My Orders & Live Tracking Trigger */}
-            <button
-              onClick={() => setIsOrdersModalOpen(true)}
-              className="relative p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-colors cursor-pointer shadow-xs"
-              title="My Orders & Live Tracking"
-              aria-label="My Orders"
-            >
-              <Package className="w-5 h-5 text-[#D6B77A]" />
-              {orders.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7FFFD4] text-[#0B0D0E] text-[9px] font-extrabold flex items-center justify-center shadow-xs">
-                  {orders.length}
-                </span>
-              )}
-            </button>
+              {/* 3. My Orders & Live Tracking Trigger */}
+              <button
+                onClick={() => setIsOrdersModalOpen(true)}
+                className="relative p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-colors cursor-pointer shadow-xs"
+                title="My Orders & Live Tracking"
+                aria-label="My Orders"
+              >
+                <Package className="w-5 h-5 text-[#D6B77A]" />
+                {orders.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#7FFFD4] text-[#0B0D0E] text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+                    {orders.length}
+                  </span>
+                )}
+              </button>
 
-            {/* 4. AI Assistant Button with Glow */}
-            <button
-              onClick={onOpenChatbot}
-              className="btn-ai-glow hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-[#141210] dark:text-[#F4EFE6] uppercase tracking-wider transition-all cursor-pointer"
-              title="Open AI Assistant"
-            >
-              <span className="text-[#059669] dark:text-[#7FFFD4] text-sm">✦</span>
-              <span>AI</span>
-            </button>
+              {/* 4. AI Assistant Button with Glow */}
+              <button
+                onClick={onOpenChatbot}
+                className="btn-ai-glow hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold text-[#141210] dark:text-[#F4EFE6] uppercase tracking-wider transition-all cursor-pointer"
+                title="Open AI Assistant"
+              >
+                <span className="text-[#059669] dark:text-[#7FFFD4] text-sm">✦</span>
+                <span>AI</span>
+              </button>
 
-            {/* 5. Dark/Light Theme Switcher */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-all cursor-pointer shadow-xs"
-              title="Toggle Theme"
-              aria-label="Theme toggle"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-5 h-5 text-[#D6B77A]" />
-              ) : (
-                <Moon className="w-5 h-5 text-[#D97706]" />
-              )}
-            </button>
+              {/* 5. Dark/Light Theme Switcher */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-all cursor-pointer shadow-xs"
+                title="Toggle Theme"
+                aria-label="Theme toggle"
+              >
+                {theme === "dark" ? (
+                  <Sun className="w-5 h-5 text-[#D6B77A]" />
+                ) : (
+                  <Moon className="w-5 h-5 text-[#D97706]" />
+                )}
+              </button>
 
-            {/* 6. Shopping Cart Drawer Trigger */}
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-colors cursor-pointer shadow-xs"
-              title="Shopping Cart"
-              aria-label="View Cart"
-            >
-              <ShoppingBag className="w-5 h-5 text-[#141210] dark:text-[#F4EFE6]" />
-              {totalItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#D6B77A] text-[#0B0D0E] text-[10px] font-black flex items-center justify-center shadow-md animate-pulse">
-                  {totalItemCount}
-                </span>
-              )}
-            </button>
+              {/* 6. Shopping Cart Drawer Trigger */}
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 rounded-full text-[#141210] dark:text-[#F4EFE6] bg-white dark:bg-[#151918] border border-[#E6DFD5] dark:border-[#222926] hover:border-[#D6B77A]/50 transition-colors cursor-pointer shadow-xs"
+                title="Shopping Cart"
+                aria-label="View Cart"
+              >
+                <ShoppingBag className="w-5 h-5 text-[#141210] dark:text-[#F4EFE6]" />
+                {totalItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#D6B77A] text-[#0B0D0E] text-[10px] font-black flex items-center justify-center shadow-md animate-pulse">
+                    {totalItemCount}
+                  </span>
+                )}
+              </button>
 
-            {/* 7. User Account Profile Dropdown (FAR RIGHT / VERY LAST POSITION) */}
-            <ProfileDropdown setActivePage={setActivePage} />
+              {/* 7. User Account Profile Dropdown */}
+              <ProfileDropdown setActivePage={setActivePage} />
+            </div>
 
-            {/* Mobile Hamburger Toggle Button */}
+            {/* Mobile Hamburger Toggle Button (Visible on Mobile/Tablet <= 767px) */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-[#141210] dark:text-[#F4EFE6] hover:bg-[#F3EFE9] dark:hover:bg-[#151918] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D6B77A]"
