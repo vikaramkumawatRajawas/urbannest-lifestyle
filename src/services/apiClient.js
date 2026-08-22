@@ -74,5 +74,13 @@ export const apiClient = {
       method: "PUT",
       body: JSON.stringify(body)
     });
+  },
+
+  patch(endpoint, body, options = {}) {
+    return this.request(endpoint, {
+      ...options,
+      method: "PATCH",
+      body: JSON.stringify(body)
+    });
   }
 };

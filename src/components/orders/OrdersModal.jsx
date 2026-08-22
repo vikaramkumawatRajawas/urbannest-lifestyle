@@ -187,7 +187,7 @@ export const OrdersModal = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* TAB 2: Interactive Live Order Tracker Visualizer */}
+          {/* TAB 2: Dynamic Live Order Tracker Visualizer */}
           {activeTab === "tracking" && currentTrackOrder && (
             <div className="space-y-6">
               {/* Order Info Card */}
@@ -195,84 +195,95 @@ export const OrdersModal = ({ isOpen, onClose }) => {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#222926] pb-4">
                   <div>
                     <span className="text-[10px] font-bold text-[#D6B77A] uppercase tracking-widest block">Live Tracking Order</span>
-                    <h4 className="font-serif-luxury font-extrabold text-2xl text-[#F4EFE6] uppercase">{currentTrackOrder.orderId}</h4>
+                    <h4 className="font-serif-luxury font-extrabold text-2xl text-[#F4EFE6] uppercase">{currentTrackOrder.orderNumber || currentTrackOrder.orderId}</h4>
                   </div>
                   <div className="text-left sm:text-right">
-                    <span className="text-[10px] text-[#9E988F] uppercase block">Estimated Delivery</span>
-                    <span className="text-xs font-bold text-[#7FFFD4]">{currentTrackOrder.estimatedDelivery}</span>
-                  </div>
-                </div>
-
-                {/* 4-Step Interactive Visual Timeline */}
-                <div className="pt-4 pb-2">
-                  <div className="relative grid grid-cols-4 gap-2 text-center">
-                    {/* Connecting Line */}
-                    <div className="absolute top-4 left-6 right-6 h-1 bg-[#222926] -z-0">
-                      <div
-                        className="h-full bg-gradient-to-r from-[#D6B77A] to-[#7FFFD4] transition-all duration-700"
-                        style={{ width: `${((currentTrackOrder.currentStep - 1) / 3) * 100}%` }}
-                      />
-                    </div>
-
-                    {trackingSteps.map((s, idx) => {
-                      const isCompleted = idx + 1 <= currentTrackOrder.currentStep;
-                      const isCurrent = idx + 1 === currentTrackOrder.currentStep;
-                      return (
-                        <div key={idx} className="relative z-10 flex flex-col items-center space-y-2">
-                          <div
-                            className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
-                              isCompleted
-                                ? "bg-[#7FFFD4] text-[#0B0D0E] shadow-[0_0_15px_rgba(127,255,212,0.5)]"
-                                : "bg-[#151918] text-[#9E988F] border border-[#222926]"
-                            } ${isCurrent ? "ring-4 ring-[#D6B77A]/40 animate-pulse" : ""}`}
-                          >
-                            {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
-                          </div>
-                          <div>
-                            <h5 className={`text-xs font-bold ${isCompleted ? "text-[#F4EFE6]" : "text-[#9E988F]"}`}>
-                              {s.title}
-                            </h5>
-                            <p className="text-[9px] text-[#9E988F] hidden sm:block">{s.desc}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                    <span className="text-[10px] text-[#9E988F] uppercase block">Current Status</span>
+                    <span className="text-xs font-bold text-[#7FFFD4] uppercase">{currentTrackOrder.status || currentTrackOrder.orderStatus}</span>
                   </div>
                 </div>
 
                 {/* Logistics Metadata Details */}
-                <div className="pt-4 border-t border-[#222926] grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div className="p-3 rounded-2xl bg-[#151918] border border-[#222926]">
                     <span className="text-[10px] text-[#9E988F] uppercase block mb-1">Courier Partner</span>
                     <span className="font-bold text-[#F4EFE6] flex items-center gap-1.5">
                       <Truck className="w-4 h-4 text-[#D6B77A]" />
-                      {currentTrackOrder.courier}
+                      {currentTrackOrder.tracking?.courier || currentTrackOrder.courier || "Delivery Partner"}
                     </span>
                   </div>
 
                   <div className="p-3 rounded-2xl bg-[#151918] border border-[#222926]">
-                    <span className="text-[10px] text-[#9E988F] uppercase block mb-1">AWB Tracking Code</span>
-                    <span className="font-mono font-bold text-[#7FFFD4]">{currentTrackOrder.awbNumber}</span>
+                    <span className="text-[10px] text-[#9E988F] uppercase block mb-1">Tracking Code</span>
+                    <span className="font-mono font-bold text-[#7FFFD4]">
+                      {currentTrackOrder.tracking?.trackingNumber || currentTrackOrder.awbNumber || "TRK123456789"}
+                    </span>
                   </div>
 
                   <div className="p-3 rounded-2xl bg-[#151918] border border-[#222926]">
-                    <span className="text-[10px] text-[#9E988F] uppercase block mb-1">Current Location</span>
-                    <span className="font-bold text-[#F4EFE6] flex items-center gap-1.5 truncate">
-                      <MapPin className="w-4 h-4 text-[#7FFFD4]" />
-                      {currentTrackOrder.currentLocation}
+                    <span className="text-[10px] text-[#9E988F] uppercase block mb-1">Expected Delivery</span>
+                    <span className="font-bold text-[#D6B77A]">
+                      {currentTrackOrder.tracking?.estimatedDelivery
+                        ? new Date(currentTrackOrder.tracking.estimatedDelivery).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric"
+                          })
+                        : currentTrackOrder.estimatedDelivery || "In 2-4 Business Days"}
                     </span>
                   </div>
+                </div>
+              </div>
+
+              {/* Dynamic Status History Steps */}
+              <div className="space-y-3">
+                <h5 className="font-serif-luxury font-bold text-sm text-[#D6B77A] uppercase tracking-wider">
+                  Tracking Timeline History
+                </h5>
+                <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#222926]">
+                  {(currentTrackOrder.statusHistory || []).map((step, idx) => {
+                    const isLatest = idx === (currentTrackOrder.statusHistory || []).length - 1;
+                    return (
+                      <div key={idx} className="relative flex flex-col space-y-0.5">
+                        <div
+                          className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                            isLatest
+                              ? "bg-[#D6B77A] text-[#0B0D0E] ring-4 ring-[#D6B77A]/30 animate-pulse"
+                              : "bg-[#7FFFD4] text-[#0B0D0E]"
+                          }`}
+                        >
+                          ✓
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <h6 className={`font-bold text-xs uppercase ${isLatest ? "text-[#D6B77A]" : "text-[#F4EFE6]"}`}>
+                            {step.status}
+                          </h6>
+                          <span className="text-[10px] text-[#9E988F]">
+                            {new Date(step.timestamp).toLocaleString("en-IN", {
+                              day: "2-digit",
+                              month: "short",
+                              hour: "2-digit",
+                              minute: "2-digit"
+                            })}
+                          </span>
+                        </div>
+                        {step.message && (
+                          <p className="text-[11px] text-[#9E988F]">{step.message}</p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Order Items Snapshot */}
               <div className="space-y-2">
                 <h5 className="font-serif-luxury font-bold text-sm text-[#D6B77A] uppercase tracking-wider">
-                  Package Contents ({currentTrackOrder.items.length} items)
+                  Package Contents ({(currentTrackOrder.items || []).length} items)
                 </h5>
                 <div className="space-y-2">
-                  {currentTrackOrder.items.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-3 rounded-2xl bg-[#0B0D0E] border border-[#222926]">
+                  {(currentTrackOrder.items || []).map((item, idx) => (
+                    <div key={item.id || idx} className="flex items-center justify-between p-3 rounded-2xl bg-[#0B0D0E] border border-[#222926]">
                       <div className="flex items-center gap-3">
                         <img src={item.image} alt={item.name} className="w-10 h-10 object-cover rounded-xl border border-[#222926]" />
                         <div>

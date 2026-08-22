@@ -27,6 +27,7 @@ import { OffersPage } from "./pages/OffersPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { WishlistPage } from "./pages/WishlistPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { OrdersPage } from "./pages/OrdersPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 import aiAvatarImg from "./assets/ai-assistant-avatar.png";
@@ -38,8 +39,11 @@ function AppContent() {
   const { isAuthModalOpen, setIsAuthModalOpen } = useAuth();
 
   useEffect(() => {
-    if (window.location.pathname.includes("reset-password") || window.location.search.includes("token=")) {
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes("reset-password") || window.location.search.includes("token=")) {
       setActivePage("reset-password");
+    } else if (path.includes("orders")) {
+      setActivePage("orders");
     }
   }, []);
 
@@ -71,6 +75,8 @@ function AppContent() {
         return <SettingsPage />;
       case "wishlist":
         return <WishlistPage setActivePage={setActivePage} />;
+      case "orders":
+        return <OrdersPage setActivePage={setActivePage} />;
       case "reset-password":
         return <ResetPasswordPage setActivePage={setActivePage} />;
       default:

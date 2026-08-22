@@ -40,3 +40,10 @@ export const protect = async (req, res, next) => {
     return errorResponse(res, "Invalid or expired session token. Please log in again.", 401);
   }
 };
+
+export const adminOnly = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return errorResponse(res, "Forbidden: Admin authorization required.", 403);
+  }
+  next();
+};

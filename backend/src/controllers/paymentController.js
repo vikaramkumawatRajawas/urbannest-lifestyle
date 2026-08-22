@@ -107,15 +107,24 @@ export const createRazorpayOrder = async (req, res, next) => {
     const newOrder = await Order.create({
       user: userId,
       orderId,
+      orderNumber: orderId,
       items: validatedItems,
       shippingDetails,
       paymentMethod,
       paymentStatus: "pending",
-      orderStatus: "confirmed",
+      orderStatus: "Order Placed",
+      status: "Order Placed",
       subtotal: calculatedSubtotal,
       tax,
       shippingFee,
       totalAmount: computedTotalAmount,
+      statusHistory: [
+        {
+          status: "Order Placed",
+          timestamp: new Date(),
+          message: "Your order has been placed successfully."
+        }
+      ],
       razorpayOrderId
     });
 
@@ -183,10 +192,18 @@ export const verifyRazorpayPayment = async (req, res, next) => {
       return errorResponse(res, "Payment signature verification failed. Invalid payment proof.", 400);
     }
 
-    // Update order status to paid
+    // Update order status to paid and confirmed
     order.paymentStatus = "paid";
+    order.status = "Order Confirmed";
+    order.orderStatus = "Order Confirmed";
     order.razorpayPaymentId = razorpay_payment_id;
     order.razorpaySignature = razorpay_signature || "verified_hmac_sha256";
+    if (!Array.isArray(order.statusHistory)) order.statusHistory = [];
+    order.statusHistory.push({
+      status: "Order Confirmed",
+      timestamp: new Date(),
+      message: "Payment received. Order confirmed."
+    });
     await order.save();
 
     // Decrement product stock quantities asynchronously

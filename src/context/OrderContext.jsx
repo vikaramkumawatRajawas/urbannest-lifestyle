@@ -5,25 +5,7 @@ import { orderService } from "../services/orderService";
 const OrderContext = createContext();
 
 const formatBackendOrder = (ord) => {
-  const stepMap = {
-    confirmed: 1,
-    packed: 2,
-    shipped: 3,
-    delivered: 4,
-    cancelled: 0
-  };
-
-  const statusLabelMap = {
-    confirmed: "Order Confirmed",
-    packed: "Packed & Ready",
-    shipped: "In Transit",
-    delivered: "Delivered",
-    cancelled: "Cancelled"
-  };
-
-  const statusKey = ord.orderStatus || "confirmed";
-  const step = stepMap[statusKey] || 1;
-  const statusText = statusLabelMap[statusKey] || "Order Confirmed";
+  const statusKey = ord.status || ord.orderStatus || "Order Placed";
 
   const dateStr = ord.createdAt
     ? new Date(ord.createdAt).toLocaleDateString("en-IN", {
@@ -33,27 +15,41 @@ const formatBackendOrder = (ord) => {
         hour: "2-digit",
         minute: "2-digit"
       })
-    : "Recently Placed";
+    : ord.placedAt || new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+  const history = Array.isArray(ord.statusHistory) && ord.statusHistory.length > 0
+    ? ord.statusHistory
+    : [
+        {
+          status: "Order Placed",
+          timestamp: ord.createdAt || new Date(),
+          message: "Your order has been placed successfully."
+        }
+      ];
+
+  const trackingObj = ord.tracking || {};
 
   return {
     ...ord,
     id: ord._id || ord.id,
-    orderId: ord.orderId,
+    orderId: ord.orderId || ord.orderNumber || `ORD-${Date.now()}`,
+    orderNumber: ord.orderNumber || ord.orderId || `ORD-${Date.now()}`,
     placedAt: dateStr,
-    totalAmount: ord.totalAmount,
-    status: statusText,
-    currentStep: step,
-    courier: "Pan-India Express Logistics",
-    awbNumber: `EX-${ord.orderId ? ord.orderId.replace(/[^0-9]/g, "") : "109823"}-IN`,
-    estimatedDelivery: step === 4 ? "Delivered" : "Expected in 2-3 Business Days",
-    currentLocation:
-      step === 4
-        ? "Delivered to recipient"
-        : step === 3
-        ? "In Transit — Regional Distribution Center"
-        : step === 2
-        ? "Packed at UrbanNest Warehouse"
-        : "Order Confirmed & Processing",
+    totalAmount: ord.totalAmount || ord.subtotal || 0,
+    subtotal: ord.subtotal || ord.totalAmount || 0,
+    discount: ord.discount || 0,
+    shippingFee: ord.shippingFee !== undefined ? ord.shippingFee : 0,
+    status: statusKey,
+    orderStatus: statusKey,
+    statusHistory: history,
+    tracking: {
+      trackingNumber: trackingObj.trackingNumber || `TRK${(ord.orderId || "").replace(/[^0-9]/g, "") || Math.floor(100000 + Math.random() * 900000)}`,
+      courier: trackingObj.courier || "UrbanNest Logistics Partner",
+      estimatedDelivery: trackingObj.estimatedDelivery || "Expected in 3-5 Business Days"
+    },
+    courier: trackingObj.courier || "UrbanNest Logistics Partner",
+    awbNumber: trackingObj.trackingNumber || `TRK${(ord.orderId || "").replace(/[^0-9]/g, "") || "109823"}`,
+    estimatedDelivery: trackingObj.estimatedDelivery || "Expected in 3-5 Business Days",
     shippingDetails: ord.shippingDetails || {},
     items: (ord.items || []).map((item) => ({
       ...item,
@@ -73,6 +69,7 @@ export const OrderProvider = ({ children }) => {
   const [selectedOrderForTracking, setSelectedOrderForTracking] = useState(null);
   const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Fetch orders from backend when user is logged in
   useEffect(() => {
@@ -98,13 +95,39 @@ export const OrderProvider = ({ children }) => {
   const fetchUserOrders = async () => {
     try {
       setLoading(true);
+      setError(null);
       const res = await orderService.getOrders();
       if (res.success && Array.isArray(res.data?.orders)) {
         const formatted = res.data.orders.map(formatBackendOrder);
         setOrders(formatted);
+      } else if (!res.success) {
+        setError(res.message || "Unable to load your orders. Please try again.");
       }
     } catch (err) {
       console.warn("[OrderContext] Failed to fetch orders from backend:", err);
+      setError("Unable to load your orders. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateOrderStatusHandler = async (orderId, updateData) => {
+    try {
+      setLoading(true);
+      const res = await orderService.updateOrderStatus(orderId, updateData);
+      if (res.success && res.data?.order) {
+        const updated = formatBackendOrder(res.data.order);
+        setOrders((prev) =>
+          prev.map((o) => (o.orderId === orderId || o.id === orderId ? updated : o))
+        );
+        if (selectedOrderForTracking && (selectedOrderForTracking.orderId === orderId || selectedOrderForTracking.id === orderId)) {
+          setSelectedOrderForTracking(updated);
+        }
+        return { success: true, order: updated };
+      }
+      return { success: false, message: res.message };
+    } catch (err) {
+      return { success: false, message: err.message };
     } finally {
       setLoading(false);
     }
@@ -158,7 +181,7 @@ export const OrderProvider = ({ children }) => {
     }
 
     // Fallback for guests or network issue
-    const localOrder = {
+    const localOrder = formatBackendOrder({
       ...newOrderData,
       orderId: newOrderData.orderId || `UN-2026-${Math.floor(10000 + Math.random() * 90000)}`,
       placedAt: new Date().toLocaleDateString("en-IN", {
@@ -166,13 +189,15 @@ export const OrderProvider = ({ children }) => {
         month: "short",
         year: "numeric"
       }),
-      status: "Order Confirmed",
-      currentStep: 1,
-      courier: "Pan-India Express Logistics",
-      awbNumber: `EX-${Math.floor(100000 + Math.random() * 900000)}-IN`,
-      estimatedDelivery: "Expected in 2-3 Business Days",
-      currentLocation: "UrbanNest Warehouse"
-    };
+      status: "Order Placed",
+      statusHistory: [
+        {
+          status: "Order Placed",
+          timestamp: new Date(),
+          message: "Your order has been placed successfully."
+        }
+      ]
+    });
 
     setOrders((prev) => [localOrder, ...prev]);
     setSelectedOrderForTracking(localOrder);
@@ -185,11 +210,13 @@ export const OrderProvider = ({ children }) => {
         orders,
         addOrder,
         fetchUserOrders,
+        updateOrderStatus: updateOrderStatusHandler,
         selectedOrderForTracking,
         setSelectedOrderForTracking,
         isOrdersModalOpen,
         setIsOrdersModalOpen,
-        loading
+        loading,
+        error
       }}
     >
       {children}

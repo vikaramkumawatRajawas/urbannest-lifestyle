@@ -16,12 +16,14 @@ import {
   LogOut,
   Sun,
   Moon,
-  ChevronRight
+  ChevronRight,
+  ShoppingBag
 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 import { useOrders } from "../../context/OrderContext";
 import { useAuth } from "../../context/AuthContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useCart } from "../../context/CartContext";
 import { getUserInitials } from "../auth/ProfileDropdown";
 
 export const MobileNavDrawer = ({
@@ -36,6 +38,7 @@ export const MobileNavDrawer = ({
   const { orders, setIsOrdersModalOpen } = useOrders();
   const { user, isAuthenticated, logout, openAuthModal } = useAuth();
   const { wishlistCount } = useWishlist();
+  const { totalItemCount, setIsCartOpen } = useCart();
 
   // 1. ESC Key Event Listener to close drawer
   useEffect(() => {
@@ -212,6 +215,47 @@ export const MobileNavDrawer = ({
               Quick Shortcuts
             </p>
             <div className="space-y-1">
+              {/* Add to Cart Link */}
+              <button
+                onClick={() => {
+                  onClose();
+                  setIsCartOpen(true);
+                }}
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[#141210] dark:text-[#F4EFE6] hover:bg-[#FAF8F5] dark:hover:bg-[#151918] transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <ShoppingBag className="w-4 h-4 text-[#D6B77A]" />
+                  <span>🛒 Add to Cart</span>
+                </div>
+                {totalItemCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#D6B77A] text-[#0B0D0E] text-[10px] font-black">
+                    {totalItemCount}
+                  </span>
+                )}
+              </button>
+
+              {/* My Orders Link */}
+              <button
+                onClick={() => {
+                  handleNavigation("orders");
+                }}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  activePage === "orders"
+                    ? "bg-[#D6B77A] text-[#0B0D0E] font-extrabold shadow-sm"
+                    : "text-[#141210] dark:text-[#F4EFE6] hover:bg-[#FAF8F5] dark:hover:bg-[#151918]"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Package className="w-4 h-4 text-[#087F68] dark:text-[#7FFFD4]" />
+                  <span>📦 My Orders</span>
+                </div>
+                {orders.length > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#087F68] dark:bg-[#7FFFD4] text-white dark:text-[#0B0D0E] text-[10px] font-black">
+                    {orders.length}
+                  </span>
+                )}
+              </button>
+
               {/* Wishlist Link */}
               <button
                 onClick={() => handleNavigation("wishlist")}
@@ -224,25 +268,6 @@ export const MobileNavDrawer = ({
                 {wishlistCount > 0 && (
                   <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-black">
                     {wishlistCount}
-                  </span>
-                )}
-              </button>
-
-              {/* My Orders & Live Tracking */}
-              <button
-                onClick={() => {
-                  onClose();
-                  setIsOrdersModalOpen(true);
-                }}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[#141210] dark:text-[#F4EFE6] hover:bg-[#FAF8F5] dark:hover:bg-[#151918] transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <Package className="w-4 h-4 text-[#087F68] dark:text-[#7FFFD4]" />
-                  <span>Orders & Live Tracking</span>
-                </div>
-                {orders.length > 0 && (
-                  <span className="px-2 py-0.5 rounded-full bg-[#087F68] dark:bg-[#7FFFD4] text-white dark:text-[#0B0D0E] text-[10px] font-black">
-                    {orders.length}
                   </span>
                 )}
               </button>

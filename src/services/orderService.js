@@ -16,8 +16,18 @@ export const orderService = {
     return await apiClient.get(`/orders/${orderId}`);
   },
 
-  // PUT /api/orders/:orderId/status
+  // GET /api/orders/:orderId/track
+  async getOrderTracking(orderId) {
+    return await apiClient.get(`/orders/${orderId}/track`);
+  },
+
+  // GET /api/orders/admin/all
+  async getAllOrdersAdmin() {
+    return await apiClient.get("/orders/admin/all");
+  },
+
+  // PATCH /api/orders/:orderId/status
   async updateOrderStatus(orderId, statusData) {
-    return await apiClient.put(`/orders/${orderId}/status`, statusData);
+    return await apiClient.patch(`/orders/${orderId}/status`, statusData);
   }
 };
