@@ -132,8 +132,8 @@ export const N8nChatbotDrawer = ({ isOpen, onClose, setActivePage }) => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 w-full max-w-sm sm:max-w-md bg-[#151918] text-[#F4EFE6] border border-[#D6B77A]/40 rounded-3xl shadow-[0_35px_80px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col h-[600px] animate-fadeIn">
-      {/* Header */}
-      <div className="p-4 bg-[#0B0D0E] text-[#F4EFE6] flex items-center justify-between border-b border-[#222926]">
+      {/* Header with Responsive Padding */}
+      <div className="p-4 sm:p-5 lg:p-6 bg-[#0B0D0E] text-[#F4EFE6] flex items-center justify-between border-b border-[#222926]">
         <div className="flex items-center gap-3">
           <div className="relative w-10 h-10 rounded-full bg-[#151918] border border-[#7FFFD4]/40 flex items-center justify-center p-1 shadow-md">
             <img
@@ -250,8 +250,8 @@ export const N8nChatbotDrawer = ({ isOpen, onClose, setActivePage }) => {
           </button>
         </div>
       ) : (
-        /* Messages Scroll Area */
-        <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-[#0B0D0E]">
+        /* Messages Scroll Area with Responsive Padding */
+        <div className="flex-1 p-4 sm:p-5 lg:p-6 overflow-y-auto space-y-4 bg-[#0B0D0E]">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -308,7 +308,7 @@ export const N8nChatbotDrawer = ({ isOpen, onClose, setActivePage }) => {
 
       {/* Suggested Quick Question Chips */}
       {!isSettingsOpen && (
-        <div className="px-3 py-2 bg-[#151918] border-t border-[#222926] overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2">
+        <div className="px-3.5 sm:px-5 py-2.5 bg-[#151918] border-t border-[#222926] overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2">
           {suggestedQuestions.map((question, idx) => (
             <button
               key={idx}
@@ -322,9 +322,9 @@ export const N8nChatbotDrawer = ({ isOpen, onClose, setActivePage }) => {
         </div>
       )}
 
-      {/* Input Field */}
+      {/* Input Field with Responsive Padding */}
       {!isSettingsOpen && (
-        <div className="p-3 bg-[#0B0D0E] border-t border-[#222926]">
+        <div className="p-4 sm:p-5 bg-[#0B0D0E] border-t border-[#222926]">
           <form
             onSubmit={(e) => {
               e.preventDefault();

@@ -28,7 +28,10 @@ export const ProductCard = ({ product }) => {
   return (
     <div className="card-luxury-3d group relative bg-[#151918] rounded-3xl border border-[#222926] overflow-hidden shadow-xl flex flex-col justify-between w-full max-w-full min-w-0">
       {/* Image Container */}
-      <div className="relative aspect-4/3 overflow-hidden bg-[#0B0D0E]">
+      <div
+        onClick={() => setSelectedProduct(product)}
+        className="relative aspect-4/3 overflow-hidden bg-[#0B0D0E] cursor-pointer"
+      >
         <img
           src={imageSrc}
           alt={product.name}
@@ -70,7 +73,10 @@ export const ProductCard = ({ product }) => {
         {/* Quick Action Overlay */}
         <div className="absolute inset-0 bg-[#0B0D0E]/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
           <button
-            onClick={() => setSelectedProduct(product)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedProduct(product);
+            }}
             className="p-3.5 rounded-full bg-[#F4EFE6] text-[#0B0D0E] hover:bg-[#D6B77A] shadow-2xl transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 cursor-pointer"
             title="View Details"
           >
