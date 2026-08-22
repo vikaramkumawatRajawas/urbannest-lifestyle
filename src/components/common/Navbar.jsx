@@ -23,6 +23,7 @@ import { useOrders } from "../../context/OrderContext";
 import { useAuth } from "../../context/AuthContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { ProfileDropdown } from "../auth/ProfileDropdown";
+import { MobileNavDrawer } from "./MobileNavDrawer";
 
 export const Navbar = ({ activePage, setActivePage, onOpenChatbot }) => {
   const { totalItemCount, setIsCartOpen } = useCart();
@@ -210,11 +211,13 @@ export const Navbar = ({ activePage, setActivePage, onOpenChatbot }) => {
             {/* 7. User Account Profile Dropdown (FAR RIGHT / VERY LAST POSITION) */}
             <ProfileDropdown setActivePage={setActivePage} />
 
-            {/* Mobile Hamburger Toggle */}
+            {/* Mobile Hamburger Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-[#141210] dark:text-[#F4EFE6] hover:bg-[#F3EFE9] dark:hover:bg-[#151918]"
-              aria-label="Open menu"
+              className="md:hidden p-2 rounded-lg text-[#141210] dark:text-[#F4EFE6] hover:bg-[#F3EFE9] dark:hover:bg-[#151918] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D6B77A]"
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation-drawer"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -300,65 +303,16 @@ export const Navbar = ({ activePage, setActivePage, onOpenChatbot }) => {
         )}
       </div>
 
-      {/* Mobile Drawer Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white/95 dark:bg-[#0B0D0E]/95 backdrop-blur-2xl border-b border-[#E6DFD5] dark:border-[#222926] px-4 pt-3 pb-6 space-y-2 animate-fadeIn">
-          {navLinks.map((link) => {
-            const IconComponent = link.icon;
-            const isActive = activePage === link.id;
-            return (
-              <button
-                key={link.id}
-                onClick={() => handleNavClick(link.id)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
-                  isActive
-                    ? "bg-[#D6B77A] text-[#0B0D0E]"
-                    : "text-[#6E6860] dark:text-[#9E988F] hover:bg-[#F3EFE9] dark:hover:bg-[#151918] hover:text-[#141210] dark:hover:text-[#F4EFE6]"
-                }`}
-              >
-                <IconComponent className="w-4 h-4" />
-                <span>{link.label}</span>
-              </button>
-            );
-          })}
-
-          <button
-            onClick={() => handleNavClick("wishlist")}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-rose-400 hover:bg-[#151918]"
-          >
-            <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
-            <span>My Wishlist ({wishlistCount})</span>
-          </button>
-
-          <div className="pt-2">
-            <ProfileDropdown setActivePage={setActivePage} />
-          </div>
-
-          <button
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              setIsOrdersModalOpen(true);
-            }}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[#7FFFD4] hover:bg-[#151918]"
-          >
-            <Package className="w-4 h-4 text-[#7FFFD4]" />
-            <span>My Orders & Live Tracking</span>
-          </button>
-
-          <div className="pt-3 border-t border-[#E6DFD5] dark:border-[#222926]">
-            <button
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                onOpenChatbot();
-              }}
-              className="btn-ai-glow w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[#141210] dark:text-[#F4EFE6] font-bold text-xs uppercase tracking-widest cursor-pointer"
-            >
-              <span className="text-[#059669] dark:text-[#7FFFD4]">✦</span>
-              <span>Ask AI Assistant</span>
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Mobile Navigation Drawer Panel */}
+      <MobileNavDrawer
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        activePage={activePage}
+        setActivePage={setActivePage}
+        onOpenChatbot={onOpenChatbot}
+        navLinks={navLinks}
+      />
     </header>
   );
 };
+
